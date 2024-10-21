@@ -40,8 +40,7 @@ export default function Main({
     onEditProfileClick();
   };
 
-  const handleAddPlaceClick = () => {
-    onAddPlaceClick();
+  const handleEditAddPlaceClick = () => {
     onAddPlaceClick();
   };
 
@@ -152,7 +151,7 @@ export default function Main({
       </PopupWithForm>
       <ImagePopup selectedCard={selectedCard} onClose={closeAllPopups} />
       {
-        //*empieza apartado de profile main
+        //empieza apartado de profile main
       }
       <Header />
       <section className="profile">
@@ -184,7 +183,7 @@ export default function Main({
         </div>
         <img
           src={addButtonImage}
-          onClick={handleAddPlaceClick}
+          onClick={handleEditAddPlaceClick}
           alt="boton para añadir contenido"
           className="profile__add-button button"
         />
