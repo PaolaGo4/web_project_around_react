@@ -14,7 +14,7 @@
 .element__image:hover {
   cursor: pointer;
 }
-.element__trash {
+.element__trash_visible {
   border: none;
   background: url(../images/Trash.svg) center no-repeat;
   background-size: 100%;
@@ -25,6 +25,9 @@
   top: 18px;
   right: 15px;
   transition: 0.3s;
+}
+.element__trash_hidden {
+  display: none;
 }
 .element__trash:hover {
   transform: scale(1.3);

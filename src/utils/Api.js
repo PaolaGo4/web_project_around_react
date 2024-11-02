@@ -3,6 +3,7 @@ class Api {
     this.baseUrl = baseUrl;
     this.headers = headers;
   }
+
   getInfo() {
     return fetch(`${this.baseUrl}/users/me`, {
       method: "GET",
@@ -18,6 +19,7 @@ class Api {
         console.log("Error. La solicitud ha fallado: ", err);
       });
   }
+
   getInitialCards() {
     return fetch(`${this.baseUrl}/cards`, {
       method: "GET",
@@ -33,7 +35,7 @@ class Api {
         console.log("Error. La solicitud ha fallado: ", err);
       });
   }
-  updateProfile(name, about) {
+  updateProfile({ name, about }) {
     return fetch(`${this.baseUrl}/users/me`, {
       method: "PATCH",
       headers: this.headers,
@@ -52,7 +54,7 @@ class Api {
         console.log("Error. La solicitud ha fallado: ", err);
       });
   }
-  addNewCard(name, link) {
+  addNewCard({ name, link }) {
     return fetch(`${this.baseUrl}/cards`, {
       method: "POST",
       headers: this.headers,
@@ -116,7 +118,7 @@ class Api {
         console.log("Error. La solicitud ha fallado: ", err);
       });
   }
-  updateAvatarProfile(avatar) {
+  updateAvatarProfile({ avatar }) {
     return fetch(`${this.baseUrl}/users/me/avatar`, {
       method: "PATCH",
       headers: this.headers,
