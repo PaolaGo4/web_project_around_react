@@ -62,14 +62,16 @@ function App() {
   }, []);
 
   const handleUpdateUser = ({ name, about }) => {
-    return api
-      .updateProfile({ name, about })
-      .then(() => {
-        setCurrentUser({ ...currentUser, name, about });
-      })
-      .then(() => {
-        closeAllPopups();
-      });
+    if (name.trim() != "" && about.trim() != "") {
+      return api
+        .updateProfile({ name, about })
+        .then(() => {
+          setCurrentUser({ ...currentUser, name, about });
+        })
+        .then(() => {
+          closeAllPopups();
+        });
+    }
   };
 
   const handleUpdateAvatar = ({ avatar }) => {
@@ -116,14 +118,16 @@ function App() {
   }
 
   function handleAddPlaceSubmit({ name, link }) {
-    api
-      .addNewCard({ name, link })
-      .then((newCard) => {
-        setCards([newCard, ...cards]);
-      })
-      .then(() => {
-        closeAllPopups();
-      });
+    if (name.trim() != "" && link.trim() != "") {
+      api
+        .addNewCard({ name, link })
+        .then((newCard) => {
+          setCards([newCard, ...cards]);
+        })
+        .then(() => {
+          closeAllPopups();
+        });
+    }
   }
 
   return (

@@ -40,8 +40,8 @@ export default function EditProfilePopUp({ isOpen, onClose, onUpdateUser }) {
           name="name"
           placeholder="Nombre"
           required
-          //minlength="2"
-          //maxlength="40"
+          minLength="2"
+          maxLength="40"
         />
         <span className="form__error name-error"></span>
         <input
@@ -53,8 +53,8 @@ export default function EditProfilePopUp({ isOpen, onClose, onUpdateUser }) {
           name="about"
           placeholder="Acerca de mi"
           required
-          //minlength="2"
-          //maxlength="200"
+          minLength="2"
+          maxLength="200"
         />
         <span className="form__error about-error"></span>
       </fieldset>

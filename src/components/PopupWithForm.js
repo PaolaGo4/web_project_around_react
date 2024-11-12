@@ -1,5 +1,6 @@
 import closeIcon from "../images/Close_icon.svg";
 import React from "react";
+import FormValidator from "./FormValidator";
 
 export default function PopupWithForm({
   children,
@@ -16,6 +17,23 @@ export default function PopupWithForm({
   /*const submit = () => {
     onSubmit();
   };*/
+
+  React.useEffect(() => {
+    if (name) {
+      const formValidator = new FormValidator(
+        {
+          formSelector: ".form",
+          inputSelector: ".form__item",
+          submitButtonSelector: ".form__button",
+          inactiveButtonClass: "form__button_inactive",
+          inputErrorClass: "form__input_type_error",
+          errorClass: "form__error-active",
+        },
+        `.form_${name}`
+      );
+      formValidator.enableValidation();
+    }
+  }, [name]);
 
   return (
     <>

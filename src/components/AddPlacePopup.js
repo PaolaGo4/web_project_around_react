@@ -40,8 +40,8 @@ export default function AddPlacePopup({
           name="name"
           placeholder="Titulo"
           required
-          //minlength="2"
-          //maxlength="30"
+          minLength="2"
+          maxLength="30"
         />
         <span className="form__error name-error"></span>
         <input
