@@ -1,147 +1,66 @@
 class Api {
-  constructor({ baseUrl, headers }) {
-    this.baseUrl = baseUrl;
-    this.headers = headers;
+  constructor(options) {
+    this._baseUrl = options.baseUrl;
+    this._headers = options.headers;
   }
-
-  getInfo() {
-    return fetch(`${this.baseUrl}/users/me`, {
-      method: "GET",
-      headers: this.headers,
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(res.status);
-      })
-      .catch((err) => {
-        console.log("Error. La solicitud ha fallado: ", err);
-      });
+  async _makeRequest(endPoint, method = "GET", body = null) {
+    const options = {
+      method,
+      headers: { ...this._headers },
+    };
+    if (body) {
+      options.headers["Content-Type"] = "application/json";
+      options.body = JSON.stringify(body);
+    }
+    try {
+      const res = await fetch(`${this._baseUrl}/${endPoint}`, options);
+      if (!res.ok) throw new Error(`Error: ${res.status}`);
+      return await res.json();
+    } catch (err) {
+      return console.log(err);
+    }
   }
-
-  getInitialCards() {
-    return fetch(`${this.baseUrl}/cards`, {
-      method: "GET",
-      headers: this.headers,
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(res.status);
-      })
-      .catch((err) => {
-        console.log("Error. La solicitud ha fallado: ", err);
-      });
+  async getInitialCards() {
+    return this._makeRequest("/cards");
   }
-  updateProfile({ name, about }) {
-    return fetch(`${this.baseUrl}/users/me`, {
-      method: "PATCH",
-      headers: this.headers,
-      body: JSON.stringify({
-        name,
-        about,
-      }),
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(res.status);
-      })
-      .catch((err) => {
-        console.log("Error. La solicitud ha fallado: ", err);
-      });
+  async getUserInfo() {
+    return this._makeRequest("/users/me");
   }
-  addNewCard({ name, link }) {
-    return fetch(`${this.baseUrl}/cards`, {
-      method: "POST",
-      headers: this.headers,
-      body: JSON.stringify({
-        name,
-        link,
-      }),
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(res.status);
-      })
-      .catch((err) => {
-        console.log("Error. La solicitud ha fallado: ", err);
-      });
+  async setUserInfo(name, about) {
+    return this._makeRequest("/users/me", "PATCH", { name, about });
   }
-  deleteCard(cardId) {
-    return fetch(`${this.baseUrl}/cards/${cardId}`, {
-      method: "DELETE",
-      headers: this.headers,
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(res.status);
-      })
-      .catch((err) => {
-        console.log("Error. La solicitud ha fallado: ", err);
-      });
+  async addCard(data) {
+    return this._makeRequest("/cards", "POST", data);
   }
-  deleteCardLike(cardId) {
-    return fetch(`${this.baseUrl}/cards/likes/${cardId}`, {
-      method: "DELETE",
-      headers: this.headers,
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(res.status);
-      })
-      .catch((err) => {
-        console.log("Error. La solicitud ha fallado: ", err);
-      });
+  async removeCard(cardId) {
+    return this._makeRequest(`/cards/${cardId}`, "DELETE");
   }
-  addCardLike(cardId) {
-    return fetch(`${this.baseUrl}/cards/likes/${cardId}`, {
-      method: "PUT",
-      headers: this.headers,
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(res.status);
-      })
-      .catch((err) => {
-        console.log("Error. La solicitud ha fallado: ", err);
-      });
+  async changeLikeCardStatus(cardId, isLiked) {
+    return isLiked
+      ? this._makeRequest(`/cards/${cardId}/likes`, "PUT")
+      : this._makeRequest(`/cards/${cardId}/likes`, "DELETE");
   }
-  updateAvatarProfile({ avatar }) {
-    return fetch(`${this.baseUrl}/users/me/avatar`, {
-      method: "PATCH",
-      headers: this.headers,
-      body: JSON.stringify({
-        avatar,
-      }),
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(res.status);
-      })
-      .catch((err) => {
-        console.log("Error. La solicitud ha fallado: ", err);
-      });
+  async updateAvatar(data) {
+    return this._makeRequest("/users/me/avatar", "PATCH", data);
+  }
+  async getUserInfoAndCards() {
+    try {
+      const [userInfo, cards] = await Promise.all([
+        this.getUserInfo(),
+        this.getInitialCards(),
+      ]);
+      return { userInfo, cards };
+    } catch (error) {
+      return await Promise.reject(error);
+    }
   }
 }
+
 const api = new Api({
-  baseUrl: "https://around.nomoreparties.co/v1/web-es-cohort-15",
+  baseUrl: "https://around.nomoreparties.co/v1/web-es-cohort-19",
   headers: {
     authorization: "cc823013-b90c-4ed6-a514-41bbaf9a7948",
-    "Content-Type": "application/json",
   },
 });
+
 export default api;
