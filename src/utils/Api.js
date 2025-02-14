@@ -59,7 +59,7 @@ class Api {
 const api = new Api({
   baseUrl: "https://around.nomoreparties.co/v1/web-es-cohort-19",
   headers: {
-    authorization: "cc823013-b90c-4ed6-a514-41bbaf9a7948",
+    authorization: "bca6f396-8830-4051-9c75-24a093f6fe1d",
   },
 });
 
