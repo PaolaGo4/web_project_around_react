@@ -57,7 +57,7 @@ class Api {
 }
 
 const api = new Api({
-  baseUrl: "https://around.nomoreparties.co/v1/web-es-cohort-19",
+  baseUrl: "https://around-api.es.tripleten-services.com/v1",
   headers: {
     authorization: "bca6f396-8830-4051-9c75-24a093f6fe1d",
   },
