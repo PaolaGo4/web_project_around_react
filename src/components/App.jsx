@@ -1,22 +1,21 @@
-import { useState, useEffect } from 'react';
-import Header from './Header/Header.jsx';
-import Main from './Main/Main.jsx';
-import Footer from './Footer/Footer.jsx';
-import api from '@utils/api.js';
-import CurrentUserContext from '@contexts/CurrentUserContext.js';
-
+import { useState, useEffect } from "react";
+import Header from "./Header/Header.jsx";
+import Main from "./Main/Main.jsx";
+import Footer from "./Footer/Footer.jsx";
+import api from "../utils/Api.js";
+import CurrentUserContext from "../contexts/CurrentUserContext.js";
 
 function App() {
   const [popup, setPopup] = useState(null);
   const [currentUser, setCurrentUser] = useState("");
-  const [ isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [cards, setCards] = useState([]);
   const [disabled, setDisabled] = useState(true);
 
   function handleOpenPopup(popup) {
     setPopup(popup);
   }
-  
+
   function handleClosePopup() {
     setPopup(null);
   }
@@ -30,7 +29,7 @@ function App() {
         console.error(error);
       }
     };
-  
+
     const getInitialCardsData = async () => {
       try {
         const cards = await api.getInitialCards();
@@ -39,17 +38,24 @@ function App() {
         console.error(error);
       }
     };
-  
+
     getUserData();
     getInitialCardsData();
   }, []);
 
   async function handleCardLike(card) {
     const isLiked = card.isLiked;
-  
-    await api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
-      setCards((state) => state.map((currentCard) => currentCard._id === card._id ? newCard : currentCard));
-    }).catch((error) => console.error(error));
+
+    await api
+      .changeLikeCardStatus(card._id, !isLiked)
+      .then((newCard) => {
+        setCards((state) =>
+          state.map((currentCard) =>
+            currentCard._id === card._id ? newCard : currentCard
+          )
+        );
+      })
+      .catch((error) => console.error(error));
   }
 
   async function handleCardDelete(cardId) {
@@ -57,7 +63,7 @@ function App() {
       setIsLoading(true);
       const isId = cardId;
       await api.removeCard(isId);
-      
+
       setCards((state) => state.filter((card) => card._id !== isId));
       setTimeout(() => {
         setIsLoading(false);
@@ -66,17 +72,17 @@ function App() {
     } catch (error) {
       console.error(error);
     }
-  } 
+  }
 
   const handleUpdateUser = (name, about) => {
     (async () => {
       setIsLoading(true);
       await api.setUserInfo(name, about).then((newData) => {
-      setCurrentUser(newData);
-      setTimeout(() => {
-        handleClosePopup();
-        setIsLoading(false);
-      }, 2000);
+        setCurrentUser(newData);
+        setTimeout(() => {
+          handleClosePopup();
+          setIsLoading(false);
+        }, 2000);
       });
     })();
   };
@@ -106,23 +112,33 @@ function App() {
       });
     })();
   };
-  
 
   return (
-    <CurrentUserContext.Provider value={{currentUser, handleUpdateUser, handleUpdateAvatar, handleAddPlaceSubmit, isLoading, disabled, setDisabled}}>
-      <div className='page'>
+    <CurrentUserContext.Provider
+      value={{
+        currentUser,
+        handleUpdateUser,
+        handleUpdateAvatar,
+        handleAddPlaceSubmit,
+        isLoading,
+        disabled,
+        setDisabled,
+      }}
+    >
+      <div className="page">
         <Header />
         <Main
-        onOpenPopup={handleOpenPopup}
-        onClosePopup={handleClosePopup}
-        popup={popup} 
-        cards={cards}
-        onCardLike={handleCardLike}
-        onCardDelete={handleCardDelete}/>
+          onOpenPopup={handleOpenPopup}
+          onClosePopup={handleClosePopup}
+          popup={popup}
+          cards={cards}
+          onCardLike={handleCardLike}
+          onCardDelete={handleCardDelete}
+        />
         <Footer />
       </div>
     </CurrentUserContext.Provider>
-  )
+  );
 }
 
-export default App
+export default App;

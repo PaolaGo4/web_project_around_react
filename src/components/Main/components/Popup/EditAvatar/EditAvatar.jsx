@@ -1,6 +1,6 @@
 import { useContext, useRef, useEffect } from "react";
-import CurrentUserContext from "@contexts/CurrentUserContext";
-import useFormValidation from "@utils/useFormValidation.js";
+import CurrentUserContext from "../../../../../contexts/CurrentUserContext";
+import useFormValidation from "../../../../../utils/useFormValidation.js";
 
 export default function EditAvatar(props) {
   const { validationConfig } = props;
@@ -26,7 +26,7 @@ export default function EditAvatar(props) {
   }
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      handleSubmit(onSubmit)();
+      handleSubmit(e);
     }
   };
 
